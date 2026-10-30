@@ -155,11 +155,7 @@
   var ORDER_NAME = {'KV':'KV','产品摄影':'产品摄影','人物产品设计精修':'人物产品设计精修','企业官网UI设计':'企业官网UI设计','品牌guideline':'品牌 Guideline','线下产品包装posm':'线下包装 · POSM','电商活动详情页':'电商活动 · 详情页'};
   var works = [];
 
-  if(!db){
-    if(EMBEDDED && EMBEDDED.length){ render(EMBEDDED); }
-    else{ document.getElementById('status').textContent = '数据通道未就绪，请稍后刷新'; }
-    return;
-  }
+  var useEmbedded = !db;
 
   function queryPage(startCursor, acc, guard){
     acc = acc || []; guard = guard || 0;
@@ -310,7 +306,13 @@
     if(e.key==='ArrowRight') document.getElementById('lb-next').click();
   });
 
-  try{ queryPage(undefined, [], 0); }catch(e){ document.getElementById('status').textContent='数据载入失败，请稍后刷新'; }
+  if(!useEmbedded){
+    try{ queryPage(undefined, [], 0); }catch(e){ document.getElementById('status').textContent='数据载入失败，请稍后刷新'; }
+  } else if(EMBEDDED && EMBEDDED.length){
+    render(EMBEDDED);
+  } else {
+    document.getElementById('status').textContent = '数据通道未就绪，请稍后刷新';
+  }
 })();
 </script>
 </body>
